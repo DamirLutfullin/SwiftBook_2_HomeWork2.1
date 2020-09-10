@@ -18,6 +18,10 @@ class ViewController: UIViewController {
     @IBOutlet var sliders: [UISlider]!
     @IBOutlet var textFields: [UITextField]!
     
+    @IBOutlet var redLabel: UILabel!
+    @IBOutlet var greenLabel: UILabel!
+    @IBOutlet var blueLabel: UILabel!
+    
     //MARK: ViewController life cicle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +29,9 @@ class ViewController: UIViewController {
         setupKeyBoards()
         
         textFields.forEach{$0.delegate = self}
-    }
     
+    }
+ 
     func setColorViewColor() {
         colorView.backgroundColor = UIColor(red: CGFloat(sliders[0].value),
                                             green: CGFloat(sliders[1].value),
@@ -50,7 +55,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let textFieldText = textField.text, let _ = Double(textFieldText), let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+        guard let textFieldText = textField.text, let rangeOfTextToReplace = Range(range, in: textFieldText) else {
                 return false
         }
         let substringToReplace = textFieldText[rangeOfTextToReplace]
@@ -60,8 +65,9 @@ extension ViewController: UITextFieldDelegate {
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         guard let value = textField.text, let floatValue = Float(value), 0...1 ~= floatValue else {
-            textField.text = sliders[textField.tag].value.description
+            textField.text = sliders[textField.tag].value.toString()
             return true }
+        textField.text = floatValue.toString()
         return true
     }
     
@@ -92,21 +98,27 @@ extension ViewController {
     //MARK: Moving content with the appearance of the keyboard
     func registerForKeyboardNotification() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             
-            // if keyboard size is not available for some reason, dont do anything
+            print("dont got keyboardSize")
             return
         }
         
         // if active text field is not nil
         if let activeTextField = activeTextField {
-            
             let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.view).maxY;
             
             let topOfKeyboard = self.view.frame.height - keyboardSize.height
