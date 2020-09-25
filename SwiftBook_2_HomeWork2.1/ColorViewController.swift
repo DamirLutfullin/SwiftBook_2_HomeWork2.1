@@ -8,17 +8,18 @@
 
 import UIKit
 
-class ColorViewController: UIViewController {
+class ColorViewController: UIViewController, SendingColorDelegate {
     
-    weak var colorDelegate: SendingColorDelegate?
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let setColorVC = segue.destination as! SetColorViewController
+        setColorVC.delegate = self
+    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        guard let color = colorDelegate?.color else { return }
+    func getColor(_ color: UIColor) {
         view.backgroundColor = color
     }
 }
 
 protocol SendingColorDelegate: class {
-    var color: UIColor? {get set}
+    func getColor(_ color: UIColor)
 }

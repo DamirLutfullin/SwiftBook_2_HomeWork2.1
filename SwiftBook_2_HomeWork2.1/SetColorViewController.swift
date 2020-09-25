@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SetColorViewController: UIViewController, SendingColorDelegate {
+class SetColorViewController: UIViewController {
     
     var activeTextField: UITextField?
-    var color: UIColor?
+    weak var delegate: SendingColorDelegate?
     
     //MARK: IBOutlets
     @IBOutlet var colorView: UIView!
@@ -26,9 +26,6 @@ class SetColorViewController: UIViewController, SendingColorDelegate {
         setupKeyBoards()
         
         textFields.forEach{$0.delegate = self}
-
-        let colorVC = navigationController?.viewControllers.first as? ColorViewController
-        colorVC?.colorDelegate = self
     }
  
     func setColorViewColor() {
@@ -37,7 +34,7 @@ class SetColorViewController: UIViewController, SendingColorDelegate {
                                             blue: CGFloat(sliders[2].value),
                                             alpha: 1)
         
-        color = colorView.backgroundColor
+        delegate?.getColor(colorView.backgroundColor!)
     }
     
     @IBAction func sliderAction(_ sender: UISlider) {
