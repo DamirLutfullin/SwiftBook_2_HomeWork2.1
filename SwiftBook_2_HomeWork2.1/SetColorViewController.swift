@@ -26,7 +26,9 @@ class SetColorViewController: UIViewController, SendingColorDelegate {
         setupKeyBoards()
         
         textFields.forEach{$0.delegate = self}
-    
+
+        let colorVC = navigationController?.viewControllers.first as? ColorViewController
+        colorVC?.colorDelegate = self
     }
  
     func setColorViewColor() {
@@ -35,21 +37,14 @@ class SetColorViewController: UIViewController, SendingColorDelegate {
                                             blue: CGFloat(sliders[2].value),
                                             alpha: 1)
         
-        let colorVC = navigationController?.viewControllers.first as? ColorViewController
-        colorVC?.colorDelegate = self
-        color = UIColor(red: CGFloat(sliders[0].value),
-                        green: CGFloat(sliders[1].value),
-                        blue: CGFloat(sliders[2].value),
-                        alpha: 1)
+        color = colorView.backgroundColor
     }
     
     @IBAction func sliderAction(_ sender: UISlider) {
         setColorViewColor()
         valueLabels[sender.tag].text = sender.value.toString()
         textFields[sender.tag].text = sender.value.toString()
-       
     }
-    
 }
 
 //MARK: UITextFieldDelegate
