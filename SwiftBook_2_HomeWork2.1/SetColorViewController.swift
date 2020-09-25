@@ -8,19 +8,16 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SetColorViewController: UIViewController, SendingColorDelegate {
     
     var activeTextField: UITextField?
+    var color: UIColor?
     
     //MARK: IBOutlets
     @IBOutlet var colorView: UIView!
     @IBOutlet var valueLabels: [UILabel]!
     @IBOutlet var sliders: [UISlider]!
     @IBOutlet var textFields: [UITextField]!
-    
-    @IBOutlet var redLabel: UILabel!
-    @IBOutlet var greenLabel: UILabel!
-    @IBOutlet var blueLabel: UILabel!
     
     //MARK: ViewController life cicle
     override func viewDidLoad() {
@@ -37,18 +34,26 @@ class ViewController: UIViewController {
                                             green: CGFloat(sliders[1].value),
                                             blue: CGFloat(sliders[2].value),
                                             alpha: 1)
+        
+        let colorVC = navigationController?.viewControllers.first as? ColorViewController
+        colorVC?.colorDelegate = self
+        color = UIColor(red: CGFloat(sliders[0].value),
+                        green: CGFloat(sliders[1].value),
+                        blue: CGFloat(sliders[2].value),
+                        alpha: 1)
     }
     
     @IBAction func sliderAction(_ sender: UISlider) {
         setColorViewColor()
         valueLabels[sender.tag].text = sender.value.toString()
         textFields[sender.tag].text = sender.value.toString()
+       
     }
     
 }
 
 //MARK: UITextFieldDelegate
-extension ViewController: UITextFieldDelegate {
+extension SetColorViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
@@ -87,8 +92,8 @@ extension ViewController: UITextFieldDelegate {
     
 }
 
-//MARK: Setup keyboard
-extension ViewController {
+//MARK: Set keyboard
+extension SetColorViewController {
     
     func setupKeyBoards() {
         addDoneButtonOnKeyboards()
