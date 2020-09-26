@@ -13,6 +13,7 @@ class ColorViewController: UIViewController, SendingColorDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let setColorVC = segue.destination as! SetColorViewController
         setColorVC.delegate = self
+        setColorVC.colorFromColorViewController = CIColor(color: view.backgroundColor!)
     }
     
     func getColor(_ color: UIColor) {

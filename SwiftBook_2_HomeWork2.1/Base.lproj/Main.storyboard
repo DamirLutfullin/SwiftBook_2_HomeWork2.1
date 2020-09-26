@@ -22,14 +22,14 @@
                     <navigationItem key="navigationItem" id="Vdu-df-4HF">
                         <barButtonItem key="rightBarButtonItem" image="pencil" catalog="system" springLoaded="YES" id="XVB-fV-RB8">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="F0F-3J-L5V"/>
+                                <segue destination="BYZ-38-t0r" kind="presentation" modalPresentationStyle="fullScreen" id="2nk-4x-SJU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2T4-x9-V1x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="204" y="113"/>
+            <point key="canvasLocation" x="219" y="113"/>
         </scene>
         <!--Set Color View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -165,20 +165,40 @@
                                     <constraint firstItem="9Qp-J9-oxF" firstAttribute="top" secondItem="mqX-VV-LHm" secondAttribute="top" id="tTE-4J-sJT"/>
                                 </constraints>
                             </stackView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jYE-TO-44D">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <navigationItem id="19U-73-BeX">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="wJv-Rc-kZS">
+                                            <connections>
+                                                <action selector="cancelButtonPressed:" destination="BYZ-38-t0r" id="d1h-6Z-rzU"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Save" id="3KC-Fd-WTI">
+                                            <connections>
+                                                <action selector="applyColorButtonPressed:" destination="BYZ-38-t0r" id="J1h-lb-IUC"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="0.81568627449999997" blue="0.55294117649999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="mqX-VV-LHm" firstAttribute="leading" secondItem="RNC-Pl-acU" secondAttribute="leading" id="61p-Lb-u5d"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="jYE-TO-44D" secondAttribute="top" id="Fjl-pJ-T0L"/>
+                            <constraint firstItem="jYE-TO-44D" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="NJz-C7-H0e"/>
                             <constraint firstItem="RNC-Pl-acU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OxI-FO-2xQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mqX-VV-LHm" secondAttribute="bottom" constant="30" id="VzT-I9-XnW"/>
                             <constraint firstItem="mqX-VV-LHm" firstAttribute="top" secondItem="RNC-Pl-acU" secondAttribute="bottom" constant="20" id="gKY-Dx-1om"/>
                             <constraint firstItem="mqX-VV-LHm" firstAttribute="trailing" secondItem="RNC-Pl-acU" secondAttribute="trailing" id="gjs-8c-B6B"/>
                             <constraint firstItem="RNC-Pl-acU" firstAttribute="width" secondItem="6Tk-OE-BBY" secondAttribute="width" multiplier="0.9" id="jv4-q4-mDd"/>
-                            <constraint firstItem="RNC-Pl-acU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="uio-xY-MqZ"/>
+                            <constraint firstItem="RNC-Pl-acU" firstAttribute="top" secondItem="jYE-TO-44D" secondAttribute="bottom" constant="30" id="uio-xY-MqZ"/>
+                            <constraint firstItem="jYE-TO-44D" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ysO-xW-gsb"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="2uL-QF-GAM"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="colorView" destination="RNC-Pl-acU" id="sai-mt-QMT"/>
                         <outletCollection property="valueLabels" destination="2E5-rx-9D1" collectionClass="NSMutableArray" id="xDl-wZ-YTq"/>
@@ -194,7 +214,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1009" y="113"/>
+            <point key="canvasLocation" x="999" y="113"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4C4-Kj-HvL">

@@ -10,8 +10,9 @@ import UIKit
 
 class SetColorViewController: UIViewController {
     
-    var activeTextField: UITextField?
     weak var delegate: SendingColorDelegate?
+    var activeTextField: UITextField?
+    var colorFromColorViewController: CIColor!
     
     //MARK: IBOutlets
     @IBOutlet var colorView: UIView!
@@ -22,19 +23,15 @@ class SetColorViewController: UIViewController {
     //MARK: ViewController life cicle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setColorViewColor()
+        setColorFromColorVC(color: colorFromColorViewController)
+        
         setupKeyBoards()
-        
         textFields.forEach{$0.delegate = self}
-    }
- 
-    func setColorViewColor() {
-        colorView.backgroundColor = UIColor(red: CGFloat(sliders[0].value),
-                                            green: CGFloat(sliders[1].value),
-                                            blue: CGFloat(sliders[2].value),
-                                            alpha: 1)
         
-        delegate?.getColor(colorView.backgroundColor!)
+        colorView.layer.cornerRadius = 18
+        
+        
+        
     }
     
     @IBAction func sliderAction(_ sender: UISlider) {
@@ -42,19 +39,57 @@ class SetColorViewController: UIViewController {
         valueLabels[sender.tag].text = sender.value.toString()
         textFields[sender.tag].text = sender.value.toString()
     }
+    
+    @IBAction func applyColorButtonPressed(_ sender: UIBarButtonItem) {
+        delegate?.getColor(colorView.backgroundColor!)
+        dismiss(animated: true, completion: nil)
+    }
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    private func changeStatusBarColor() {
+        let statusBarBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 20))
+        statusBarBackgroundView.backgroundColor = #colorLiteral(red: 1, green: 0.9952029586, blue: 0.9402899742, alpha: 1)
+        view.insertSubview(statusBarBackgroundView, at: 0)
+    }
+    
+    //Set color of ColorView from sliders value
+    private func setColorViewColor() {
+        colorView.backgroundColor = UIColor(red: CGFloat(sliders[0].value),
+                                            green: CGFloat(sliders[1].value),
+                                            blue: CGFloat(sliders[2].value),
+                                            alpha: 1)
+//        delegate?.getColor(colorView.backgroundColor!)
+//
+    }
+    
+    //Установка цвета при переходе от главного скрина
+    private func setColorFromColorVC(color: CIColor) {
+        
+        let rgbArray = [Float(color.red), Float(color.green), Float(color.blue)]
+        
+        for index in 0...2 {
+            sliders[index].value = rgbArray[index]
+            textFields[index].text = rgbArray[index].toString()
+            valueLabels[index].text = rgbArray[index].toString()
+        }
+        colorView.backgroundColor = UIColor(ciColor: colorFromColorViewController)
+    }
 }
 
 //MARK: UITextFieldDelegate
 extension SetColorViewController: UITextFieldDelegate {
     
+    //set active TF for moving content with keyboard
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.activeTextField = textField
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let textFieldText = textField.text, let rangeOfTextToReplace = Range(range, in: textFieldText) else {
-                return false
-        }
+        
+        guard let textFieldText = textField.text, let rangeOfTextToReplace = Range(range, in: textFieldText)
+        else { return false }
         let substringToReplace = textFieldText[rangeOfTextToReplace]
         let count = textFieldText.count - substringToReplace.count + string.count
         return count <= 4
@@ -87,13 +122,13 @@ extension SetColorViewController: UITextFieldDelegate {
 //MARK: Set keyboard
 extension SetColorViewController {
     
-    func setupKeyBoards() {
+    private func setupKeyBoards() {
         addDoneButtonOnKeyboards()
         registerForKeyboardNotification()
     }
     
     //MARK: Moving content with the appearance of the keyboard
-    func registerForKeyboardNotification() {
+    private func registerForKeyboardNotification() {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow),
@@ -106,7 +141,7 @@ extension SetColorViewController {
                                                object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc private func keyboardWillShow(notification: NSNotification) {
         
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             
@@ -127,14 +162,14 @@ extension SetColorViewController {
         }
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
     }
     
     //MARK: addDoneButtonOnKeyboards()
-    func addDoneButtonOnKeyboards() {
+    private func addDoneButtonOnKeyboards() {
         
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         doneToolbar.barStyle = .default
@@ -151,7 +186,7 @@ extension SetColorViewController {
         }
     }
     
-    @objc func doneButtonAction(TF: UITextField){
+    @objc private func doneButtonAction(textField: UITextField){
         view.endEditing(true)
     }
     
